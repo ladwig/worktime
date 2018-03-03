@@ -1,80 +1,85 @@
-import React from 'react'
+import { Component } from 'react'
 
-class Index extends React.Component {
-  constructor(props) {
-   super(props)
-   this.state = {
-     fDate: 0,
-     sDate: 0,
-     pDate: 0,
-     pTimer: 0,
-     timer: 0,
-     Dates: []
-   }
- }
-
-   timer = (arg) =>  {
-
-     //Start timer
-    if (arg == 0) {
-      this.setState({
-        fDate: new Date(),
-        interval: setInterval(() => this.tick(0), 1000)
-      })
-    }
-
-    //Stop timer
-    else if (arg == 1) {
-      this.setState({
-        interval: clearInterval(this.state.interval),
-        timer: 0,
-        sDate: new Date()
-      })
-    }
-
-    //Pause timer
-    else if (arg == 2) {
-      this.setState({
-      pTimer: this.state.timer,
-      interval: clearInterval(this.state.interval)
-      })
-    }
-
-    //Continue timer
-    else if (arg == 3) {
-      this.setState({
-        pDate: new Date(),
-        interval: setInterval(() => this.tick(1), 1000)
-      })
-    }
+class Index extends Component {
+  state = {
+    timePassed: 0,
+    startTime: 0,
+    endTime: 0,
+    list: []
   }
 
-  tick = (pause) =>  {
-    if(pause == 0) {
-      this.setState({
-        timer: Math.floor((new Date() - this.state.fDate)/1000)
-      })
-    }
+  interval = null
 
-    else if (pause == 1) {
-      this.setState({
-        timer: this.state.pTimer + Math.floor((new Date() - this.state.pDate)/1000)
-      })
-    }
+  componentDidUpdate(prevProps, prevStates) {
+    console.log(this.state.list)
+  }
+
+  increaseTimer = () => {
+    this.setState({
+      timePassed: this.state.timePassed + 1000
+    })
+  }
+
+  pauseTimer = () => {
+    clearInterval(this.interval)
+  }
+
+  startTimer = () => {
+    this.interval = setInterval(this.increaseTimer, 1000)
+    this.setState({
+      startTime: new Date()
+    })
+  }
+
+  continueTimer = () => {
+    this.startTimer()
+  }
+
+  clearTimer = () => {
+    this.pauseTimer()
+
+    const x = new Date()
+
+    this.setState({
+      timePassed: 0,
+      endTime: x
+    })
+    
+      this.addToList(this.state.startTime, x)
+  }
+
+  getNumber = deg => {
+    return ('0' + deg).slice(-2)
+  }
+
+  //
+
+  addToList = (start, end) => {
+    let listArray = this.state.list
+    listArray.push({ startTime: start, endTime: end})
+    this.setState({
+      list: listArray
+    })
   }
 
   render () {
+
+    const time = new Date(this.state.timePassed)
+    const seconds = this.getNumber(time.getSeconds())
+    const hours = this.getNumber(time.getHours() - 1)
+    const minutes = this.getNumber(time.getMinutes())
    return (
      <body>
       <main>
         <div className='counter'>
-        {this.state.timer}
+        {hours}:{minutes}:{seconds}
         </div>
-        <button value='START' onClick={() => this.timer(0)}>START</button>
-        <button value='STOP' onClick={() => this.timer(1)}>STOP</button>
-        <button value='PAUSE' onClick={() => this.timer(2)}>PAUSE</button>
-        <button value='GOON' onClick={() => this.timer(3)}>GOON</button>
+        <button onClick={this.pauseTimer}>Pause</button>
+        <button onClick={this.continueTimer}>Continue</button>
+        <button onClick={this.clearTimer}>Stop</button>
+        <button onClick={this.startTimer}>Start</button>
       </main>
+
       <style jsx>{`
         body {
           width: 100%;
