@@ -174,8 +174,8 @@ class Index extends Component {
 
             return (
               <tr>
-                <td>{startTime.format('lll')}</td>
-                <td>{endTime.format('lll')}</td>
+                <td>{startTime.format('DD.MM.  hh:mm')}</td>
+                <td>{endTime.format('DD.MM. hh:mm')}</td>
                 <td>{this.getNumber(duration.getHours() - 1) + ':' + this.getNumber(duration.getMinutes()) + '  **' + this.getNumber(duration.getSeconds()) + '**  '}</td>
                 <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + '  **' + this.getNumber(durationPause.getSeconds()) + '**'}</td>
 
@@ -189,7 +189,7 @@ class Index extends Component {
           body {
             width: 100%;
             height: 100%;
-            background: #B3B3B3;
+            background: rgb(240, 240, 240);
             z-index: -999;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
           }
@@ -201,6 +201,7 @@ class Index extends Component {
             margin-top: 25vh;
             width: 300px;
             background: #242325;
+            border: 1px solid gray;
           }
 
           .counter.wrapper {
@@ -271,7 +272,6 @@ class Index extends Component {
           .popup {
             position: fixed;
             z-index: 1;
-            padding-top: 100px;
             left: 0;
             top: 0;
             width: 100%;
@@ -283,8 +283,19 @@ class Index extends Component {
 
           table {
             margin: auto;
+            padding-top: 100px;
+          }
+
+          tr {
+            padding: 0px;
+            height: 20px;
             text-align: center;
-            padding: 10px;
+            line-height: 1.5;
+          }
+
+          td, th {
+            border-bottom: 1px solid #ddd;
+            padding: 12px;
           }
 
           .close {
@@ -292,7 +303,7 @@ class Index extends Component {
             float: right;
             font-size: 28px;
             font-weight: bold;
-            margin-top -100px;
+            margin-right: 10px;
           }
 
         .close:hover,
