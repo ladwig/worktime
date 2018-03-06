@@ -65,7 +65,6 @@ class Index extends Component {
     })
 
     this.addToList(this.state.startTime, x)
-
     this.buttonPressed('stop')
   }
 
@@ -165,18 +164,20 @@ class Index extends Component {
             <th>Start time</th>
             <th>End time</th>
             <th>Duration</th>
+            <th>Break duration</th>
           </tr>
           {this.state.list.map(row => {
             const startTime = moment(row.startTime)
             const endTime = moment(row.endTime)
-            const duration = new Date(row.duration)
+            const duration = (new Date(row.duration))
             const durationPause = new Date(row.durationPause)
 
             return (
               <tr>
                 <td>{startTime.format('lll')}</td>
                 <td>{endTime.format('lll')}</td>
-                <td>{this.getNumber(duration.getHours() - 1) + ':' + this.getNumber(duration.getMinutes())}</td>
+                <td>{this.getNumber(duration.getHours() - 1) + ':' + this.getNumber(duration.getMinutes()) + '  **' + this.getNumber(duration.getSeconds()) + '**  '}</td>
+                <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + '  **' + this.getNumber(durationPause.getSeconds()) + '**'}</td>
 
               </tr>
             )
