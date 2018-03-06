@@ -9,7 +9,7 @@ class Index extends Component {
     startTime: 0,
     endTime: 0,
     list: [],
-    buttonStart: 'inline-block',
+    buttonStart: 'block',
     buttonPause: 'none',
     buttonCon: 'none',
     buttonStop: 'none',
@@ -20,7 +20,7 @@ class Index extends Component {
 
 
   componentDidUpdate() {
-    console.log(this.state.timePassed)
+    console.log(this.state.list)
   }
 
   //Used for the start button
@@ -71,8 +71,8 @@ class Index extends Component {
       case 'start':
       case 'con':
         this.setState({
-          buttonPause: 'inline-block',
-          buttonStop: 'inline-block',
+          buttonPause: 'block',
+          buttonStop: 'block',
           buttonCon: 'none',
           buttonStart: 'none'
         })
@@ -80,8 +80,8 @@ class Index extends Component {
       case 'pause':
         this.setState({
           buttonPause: 'none',
-          buttonStop: 'inline-block',
-          buttonCon: 'inline-block'
+          buttonStop: 'block',
+          buttonCon: 'block'
         })
         break;
       case 'stop':
@@ -89,7 +89,7 @@ class Index extends Component {
           buttonPause: 'none',
           buttonStop: 'none',
           buttonCon: 'none',
-          buttonStart: 'inline-block'
+          buttonStart: 'block'
         })
         break;
     }
@@ -100,7 +100,8 @@ class Index extends Component {
   //Method to add the startTime and endTime to the list array (state)
   addToList = (start, end) => {
     let listArray = this.state.list
-    listArray.push({ startTime: start, endTime: end})
+
+    listArray.push({ startTime: start, endTime: end, duration: this.state.duration})
     this.setState({
       list: listArray
     })
@@ -129,14 +130,18 @@ class Index extends Component {
         <div className='counter'>
         {hours}:{minutes}:{seconds}
         </div>
-        <start onClick={this.startTimer}>Start</start>
-        <pause onClick={this.pauseTimer}>Pause</pause>
-        <continue onClick={this.continueTimer}>Continue</continue>
-        <stop onClick={this.clearTimer}>Stop</stop>
-        <showPopup onClick={ x => {this.setState({ popup: 'block'})}}>Show List</showPopup>
+        <div className="row first">
+          <div className="start" onClick={this.startTimer}>Start</div>
+          <div className="pause" onClick={this.pauseTimer}>Pause</div>
+          <div className="continue" onClick={this.continueTimer}>Continue</div>
+          <div className="stop" onClick={this.clearTimer}>Stop</div>
+        </div>
+        <div className="row second">
+          <div className="show-popup" onClick={ x => {this.setState({ popup: 'block'})}}>Show List</div>
+        </div>
       </main>
 
-      <popup>
+      <div className="popup">
           <span className="close" onClick={ x => {this.setState({ popup: 'none'})}}>&times;</span>
           <table>
           <tr>
@@ -145,10 +150,10 @@ class Index extends Component {
             <th>Duration</th>
           </tr>
           {this.state.list.map(row => {
-            let startTime = moment(row.startTime)
-            let endTime = moment(row.endTime)
-            let durationM = endTime.diff(startTime, 'm')
-            let durationH = endTime.diff(startTime, 'h')
+            const startTime = moment(row.startTime)
+            const endTime = moment(row.endTime)
+            const durationM = endTime.diff(startTime, 'm')
+            const durationH = endTime.diff(startTime, 'h')
 
             return (
               <tr>
@@ -159,7 +164,7 @@ class Index extends Component {
             )
           })}
           </table>
-      </popup>
+      </div>
 
         <style jsx global>{`
           body {
@@ -193,51 +198,52 @@ class Index extends Component {
             padding: 10px;
           }
 
-          start {
+          .start {
             color: #fff;
             height: 60px;
             width: 100%;
             background: green;
-            margin-top: 40px;
+            line-height: 60px;
             display: ${this.state.buttonStart};
           }
 
-          pause {
+          .pause {
             color: #fff;
             height: 60px;
             width: 50%;
             background: orange;
-            margin-top: 40px;
+            line-height: 60px;
             display: ${this.state.buttonPause};
           }
 
-          continue {
+          .continue {
             color: #fff;
             height: 60px;
             width: 50%;
             background: lightgreen;
-            margin-top: 40px;
+            line-height: 60px;
             display: ${this.state.buttonCon};
           }
 
-          stop {
+          .stop {
             color: #fff;
             height: 60px;
             width: 50%;
             background: red;
-            margin-top: 40px;
+            line-height: 60px;
             display: ${this.state.buttonStop};
           }
 
-          showPopup {
+          .show-popup {
             color: #fff;
-            height: 43px;
+            height: 60px;
             width: 100%
             background: lightgray;
-            display: inline-block;
+            display: block;
+            line-height: 60px;
           }
 
-          popup {
+          .popup {
             position: fixed;
             z-index: 1;
             padding-top: 100px;
@@ -264,6 +270,11 @@ class Index extends Component {
             color: #000;
             text-decoration: none;
             cursor: pointer;
+        }
+
+        .row.first {
+          display: flex;
+          margin-top: 40px;
         }
 
         `}</style>
