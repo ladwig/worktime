@@ -1,4 +1,7 @@
 import { Component } from 'react'
+import moment from 'moment'
+
+moment.locale('de')
 
 class Index extends Component {
   state = {
@@ -10,7 +13,8 @@ class Index extends Component {
 
   interval = null
 
-  componentDidUpdate(prevProps, prevStates) {
+
+  componentDidUpdate() {
     console.log(this.state.list)
   }
 
@@ -44,7 +48,7 @@ class Index extends Component {
       timePassed: 0,
       endTime: x
     })
-    
+
       this.addToList(this.state.startTime, x)
   }
 
@@ -62,14 +66,17 @@ class Index extends Component {
     })
   }
 
+
   render () {
 
     const time = new Date(this.state.timePassed)
     const seconds = this.getNumber(time.getSeconds())
     const hours = this.getNumber(time.getHours() - 1)
     const minutes = this.getNumber(time.getMinutes())
+
    return (
-     <body>
+
+     <div>
       <main>
         <div className='counter'>
         {hours}:{minutes}:{seconds}
@@ -80,28 +87,60 @@ class Index extends Component {
         <button onClick={this.startTimer}>Start</button>
       </main>
 
-      <style jsx>{`
-        body {
-          width: 100%;
-          height: 100%;
-          background: #f5fsf5;
-          font-family: Verdana, Geneva, sans-serif;
-        }
+        <table>
+        <tr>
+          <th>Start time</th>
+          <th>End time</th>
+          <th>Duration</th>
+        </tr>
+        {this.state.list.map(row => {
+          let startTime = moment(row.startTime)
+          let endTime = moment(row.endTime)
+          let duration = endTime.diff(startTime)
+          let durationM = endTime.diff(startTime, 'm')
+          let durationH = endTime.diff(startTime, 'h')
 
-        main {
-          margin: auto;
-          margin-top: 25vh;
-          width: 300px;
-          height 300px;
-          background: #0f1626;
-        }
+          return (
+            <tr>
+              <td>{startTime.format('lll')}</td>
+              <td>{endTime.format('lll')}</td>
+              <td>{durationH + 'h ' +  durationM + 'm'}</td>
+            </tr>
 
-        .counter {
-          font-size: 40px;
-          color: #fff;
-        }
-      `}</style>
-     </body>
+          )
+        })}
+        </table>
+
+        <style jsx global>{`
+          body {
+            width: 100%;
+            height: 100%;
+            background: #f5fsf5;
+            font-family: Verdana, Geneva, sans-serif;
+          }
+        `}</style>
+
+        <style jsx>{`
+          main {
+            margin: auto;
+            margin-top: 25vh;
+            width: 300px;
+            height 300px;
+            background: #0f1626;
+            text-align: center;
+          }
+
+          .counter {
+            font-size: 55px;
+            color: #fff;
+            padding-top: 30%;
+          }
+
+          tr {
+            color: black;
+          }
+        `}</style>
+      </div>
    )
   }
 }
