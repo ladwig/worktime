@@ -10,22 +10,25 @@ class Index extends Component {
     endTime: 0,
     startPause: 0,
     endPause: 0,
-    durationBrutto: 0,
+    durationBrutto: 0, //time with breaks, durationNetto = time without breaks
+    moneyValue: 10,
+    monthlyMoney: 0,
     durationPause: 0,
-    durationNetto: 0,
-    monthlyBrutto: 0,
+    monthlyBrutto: 0, //time with breaks
+    monthlyNetto: 0,  //time without breaks
     list: [],
     buttonStart: 'block',
     buttonPause: 'none',
     buttonCon: 'none',
     buttonStop: 'none',
-    popup: 'none'
+    popup: 'none',
+    dev: ' ** '
   }
 
   interval = null
 
   componentDidUpdate() {
-    console.log(this.state.monthlyBrutto)
+    console.log(this.state.list)
   }
 
   //Used for the start button
@@ -59,7 +62,6 @@ class Index extends Component {
     clearInterval(this.interval)
     const x = new Date()
     const y = x - this.state.startTime
-
     this.setState({
       timePassed: 0,
       endTime: x,
@@ -116,8 +118,20 @@ class Index extends Component {
 
   //Method to add the startTime and endTime to the list array (state)
   addToList = (start, end, durationBrutto) => {
+    const durationNetto = durationBrutto - this.state.durationPause
+    const dayMoney = (((this.state.moneyValue / 60) / 60) / 1000) * durationNetto
+
     let listArray = this.state.list
-    listArray.push({ startTime: start, endTime: end, durationBrutto, durationPause: this.state.durationPause})
+
+    listArray.push({
+      startTime: start,
+      endTime: end,
+      durationBrutto,
+      durationNetto,
+      durationPause: this.state.durationPause,
+      dayMoney
+    })
+
     this.setState({
       list: listArray
     })
@@ -136,7 +150,9 @@ class Index extends Component {
   calcMonth = () => {
     this.state.list.map(row => {
       this.setState({
-        monthlyBrutto: this.state.monthlyBrutto + row.durationBrutto
+        monthlyBrutto: this.state.monthlyBrutto + row.durationBrutto,
+        monthlyNetto: this.state.monthlyNetto + row.durationNetto,
+        monthlyMoney: this.state.monthlyMoney + row.dayMoney
       })
      })
   }
@@ -149,6 +165,8 @@ class Index extends Component {
     const hours = this.getNumber(time.getHours() - 1)
     const minutes = this.getNumber(time.getMinutes())
     const monthlyBrutto = new Date(this.state.monthlyBrutto)
+    const monthlyNetto = new Date(this.state.monthlyNetto)
+    const monthlyMoney = this.state.monthlyMoney
 
    return (
 
@@ -190,16 +208,19 @@ class Index extends Component {
               <tr>
                 <td>{startTime.format('DD.MM.  hh:mm')}</td>
                 <td>{endTime.format('DD.MM. hh:mm')}</td>
-                <td>{this.getNumber(durationBrutto.getHours() - 1) + ':' + this.getNumber(durationBrutto.getMinutes()) + '  **' + this.getNumber(durationBrutto.getSeconds()) + '**  '}</td>
-                <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + '  **' + this.getNumber(durationPause.getSeconds()) + '**'}</td>
+                <td>{this.getNumber(durationBrutto.getHours() - 1) + ':' + this.getNumber(durationBrutto.getMinutes()) + this.state.dev + this.getNumber(durationBrutto.getSeconds()) + this.state.dev}</td>
+                <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + this.state.dev + this.getNumber(durationPause.getSeconds()) + this.state.dev}</td>
               </tr>
             </tbody>
             )
             })}
           </table>
-
-          <div className="monthlyBrutto">{this.getNumber(monthlyBrutto.getHours() - 1) + ':' + this.getNumber(monthlyBrutto.getMinutes()) + this.getNumber(monthlyBrutto.getSeconds())}</div>
-      </div>
+          <div className="monthly">
+            <div className="monthly brutto">{'Monthly working time (b): ' + this.getNumber(monthlyBrutto.getHours() - 1) + ':' + this.getNumber(monthlyBrutto.getMinutes()) + this.state.dev + this.getNumber(monthlyBrutto.getSeconds()) + this.state.dev}</div>
+            <div className="monthly netto">{'Monthly working time (n): ' + this.getNumber(monthlyNetto.getHours() - 1) + ':' + this.getNumber(monthlyNetto.getMinutes()) + this.state.dev + this.getNumber(monthlyNetto.getSeconds()) + this.state.dev}</div>
+            <div className="monthly money">{'Monthly earnings: ' + monthlyMoney}</div>
+          </div>
+        </div>
 
         <style jsx global>{`
           body {
