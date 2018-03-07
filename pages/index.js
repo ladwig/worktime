@@ -10,7 +10,10 @@ class Index extends Component {
     endTime: 0,
     startPause: 0,
     endPause: 0,
+    durationBrutto: 0,
     durationPause: 0,
+    durationNetto: 0,
+    monthlyBrutto: 0,
     list: [],
     buttonStart: 'block',
     buttonPause: 'none',
@@ -21,9 +24,8 @@ class Index extends Component {
 
   interval = null
 
-
   componentDidUpdate() {
-    console.log(this.state.list)
+    console.log(this.state.monthlyBrutto)
   }
 
   //Used for the start button
@@ -46,7 +48,7 @@ class Index extends Component {
 
   //Used for the continue button
   continueTimer = () => {
-    this.startTimer()
+    this.interval = setInterval(this.increaseTimer, 1000)
     this.buttonPressed('con')
     const endPause = new Date()
     this.pauser(endPause)
@@ -54,17 +56,18 @@ class Index extends Component {
 
   //Used for the stop button (saves the duration to the list)
   clearTimer = () => {
-    this.pauseTimer()
-
+    clearInterval(this.interval)
     const x = new Date()
+    const y = x - this.state.startTime
 
     this.setState({
       timePassed: 0,
       endTime: x,
+      durationBrutto: y,
       durationPause: 0
     })
 
-    this.addToList(this.state.startTime, x)
+    this.addToList(this.state.startTime, x, y)
     this.buttonPressed('stop')
   }
 
@@ -111,16 +114,15 @@ class Index extends Component {
     }
   }
 
-  //
-
   //Method to add the startTime and endTime to the list array (state)
-  addToList = (start, end) => {
+  addToList = (start, end, durationBrutto) => {
     let listArray = this.state.list
-    let duration = moment(end).diff(start, 'ms')
-    listArray.push({ startTime: start, endTime: end, duration, durationPause: this.state.durationPause})
+    listArray.push({ startTime: start, endTime: end, durationBrutto, durationPause: this.state.durationPause})
     this.setState({
       list: listArray
     })
+
+    this.calcMonth()
   }
 
   //Method for the shown timer
@@ -130,14 +132,23 @@ class Index extends Component {
     })
   }
 
+  //Calc the monthly worktime
+  calcMonth = () => {
+    this.state.list.map(row => {
+      this.setState({
+        monthlyBrutto: this.state.monthlyBrutto + row.durationBrutto
+      })
+     })
+  }
 
   render () {
 
-    //the consts for the shown timer
+    //the consts for the shown timer & some others
     const time = new Date(this.state.timePassed)
     const seconds = this.getNumber(time.getSeconds())
     const hours = this.getNumber(time.getHours() - 1)
     const minutes = this.getNumber(time.getMinutes())
+    const monthlyBrutto = new Date(this.state.monthlyBrutto)
 
    return (
 
@@ -160,29 +171,34 @@ class Index extends Component {
       <div className="popup">
           <span className="close" onClick={ x => {this.setState({ popup: 'none'})}}>&times;</span>
           <table>
-          <tr>
-            <th>Start time</th>
-            <th>End time</th>
-            <th>Duration</th>
-            <th>Break duration</th>
-          </tr>
-          {this.state.list.map(row => {
-            const startTime = moment(row.startTime)
-            const endTime = moment(row.endTime)
-            const duration = (new Date(row.duration))
-            const durationPause = new Date(row.durationPause)
+            <thead>
+              <tr>
+                <th>Start time</th>
+                <th>End time</th>
+                <th>Duration (incl. breaks)</th>
+                <th>Break duration</th>
+              </tr>
+            </thead>
+            {this.state.list.map(row => {
+              const startTime = moment(row.startTime)
+              const endTime = moment(row.endTime)
+              const durationBrutto = new Date(row.durationBrutto)
+              const durationPause = new Date(row.durationPause)
 
             return (
+            <tbody>
               <tr>
                 <td>{startTime.format('DD.MM.  hh:mm')}</td>
                 <td>{endTime.format('DD.MM. hh:mm')}</td>
-                <td>{this.getNumber(duration.getHours() - 1) + ':' + this.getNumber(duration.getMinutes()) + '  **' + this.getNumber(duration.getSeconds()) + '**  '}</td>
+                <td>{this.getNumber(durationBrutto.getHours() - 1) + ':' + this.getNumber(durationBrutto.getMinutes()) + '  **' + this.getNumber(durationBrutto.getSeconds()) + '**  '}</td>
                 <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + '  **' + this.getNumber(durationPause.getSeconds()) + '**'}</td>
-
               </tr>
+            </tbody>
             )
-          })}
+            })}
           </table>
+
+          <div className="monthlyBrutto">{this.getNumber(monthlyBrutto.getHours() - 1) + ':' + this.getNumber(monthlyBrutto.getMinutes()) + this.getNumber(monthlyBrutto.getSeconds())}</div>
       </div>
 
         <style jsx global>{`
@@ -201,7 +217,6 @@ class Index extends Component {
             margin-top: 25vh;
             width: 300px;
             background: #242325;
-            border: 1px solid gray;
           }
 
           .counter.wrapper {
