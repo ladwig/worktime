@@ -24,6 +24,8 @@ class List extends Component {
     return (
       <div className="popup">
         <span className="close" onClick={ x => {setState({ popup: 'none'})}}>&times;</span>
+        <span className="older">OLDER</span>
+        <span className="newer">NEWER</span>
           <table>
             <thead>
               <tr>

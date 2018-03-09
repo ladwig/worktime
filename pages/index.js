@@ -64,14 +64,17 @@ class Index extends Component {
     clearInterval(this.interval)
     const x = new Date()
     const y = x - this.state.startTime
+    const k = moment(x).format('MMYY')
+
     this.setState({
       timePassed: 0,
       endTime: x,
       durationBrutto: y,
-      durationPause: 0
+      durationPause: 0,
+      monthId: k
     })
 
-    this.addToList(this.state.startTime, x, y)
+    this.addToList(this.state.startTime, x, y, k)
     this.buttonPressed('stop')
   }
 
@@ -119,7 +122,7 @@ class Index extends Component {
   }
 
   //Method to add the startTime and endTime to the list array (state)
-  addToList = (start, end, durationBrutto) => {
+  addToList = (start, end, durationBrutto, monthId) => {
     const durationNetto = durationBrutto - this.state.durationPause
     const dayMoney = (((this.state.moneyValue / 60) / 60) / 1000) * durationNetto
 
@@ -131,7 +134,8 @@ class Index extends Component {
       durationBrutto,
       durationNetto,
       durationPause: this.state.durationPause,
-      dayMoney
+      dayMoney,
+      monthId
     })
 
     this.setState({
