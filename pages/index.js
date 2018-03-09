@@ -14,10 +14,7 @@ class Index extends Component {
     endPause: 0,
     durationBrutto: 0, //time with breaks, durationNetto = time without breaks
     moneyValue: 10, //Earnings per hour
-    monthlyMoney: 0,
     durationPause: 0,
-    monthlyBrutto: 0, //time with breaks
-    monthlyNetto: 0,  //time without breaks
     list: [],
     buttonStart: 'block',
     buttonPause: 'none',
@@ -64,7 +61,7 @@ class Index extends Component {
     clearInterval(this.interval)
     const x = new Date()
     const y = x - this.state.startTime
-    const k = moment(x).format('MMYY')
+    const k = moment(x).format('MMMM')
 
     this.setState({
       timePassed: 0,
@@ -124,7 +121,7 @@ class Index extends Component {
   //Method to add the startTime and endTime to the list array (state)
   addToList = (start, end, durationBrutto, monthId) => {
     const durationNetto = durationBrutto - this.state.durationPause
-    const dayMoney = (((this.state.moneyValue / 60) / 60) / 1000) * durationNetto
+    const dailyEarnings = (((this.state.moneyValue / 60) / 60) / 1000) * durationNetto
 
     let listArray = this.state.list
 
@@ -134,15 +131,13 @@ class Index extends Component {
       durationBrutto,
       durationNetto,
       durationPause: this.state.durationPause,
-      dayMoney,
+      dailyEarnings,
       monthId
     })
 
     this.setState({
       list: listArray
     })
-
-    this.calcMonth()
   }
 
   //Method for the shown timer
@@ -150,17 +145,6 @@ class Index extends Component {
     this.setState({
       timePassed: this.state.timePassed + 1000
     })
-  }
-
-  //Calc the monthly worktime
-  calcMonth = () => {
-    this.state.list.map(row => {
-      this.setState({
-        monthlyBrutto: this.state.monthlyBrutto + row.durationBrutto,
-        monthlyNetto: this.state.monthlyNetto + row.durationNetto,
-        monthlyMoney: this.state.monthlyMoney + row.dayMoney
-      })
-     })
   }
 
   render () {
