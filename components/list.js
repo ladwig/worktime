@@ -24,38 +24,41 @@ class List extends Component {
     return (
       <div className="popup">
         <span className="close" onClick={ x => {setState({ popup: 'none'})}}>&times;</span>
-        <table>
-          <thead>
-            <tr>
-              <th>Start time</th>
-              <th>End time</th>
-              <th>Duration (incl. breaks)</th>
-              <th>Break duration</th>
-            </tr>
-          </thead>
-          {state.list.map(row => {
-            const startTime = moment(row.startTime)
-            const endTime = moment(row.endTime)
-            const durationBrutto = new Date(row.durationBrutto)
-            const durationPause = new Date(row.durationPause)
+          <table>
+            <thead>
+              <tr>
+                <th>Start time</th>
+                <th>End time</th>
+                <th>Duration (incl. breaks)</th>
+                <th>Break duration</th>
+              </tr>
+            </thead>
+            {state.list.map(row => {
+              const startTime = moment(row.startTime)
+              const endTime = moment(row.endTime)
+              const durationBrutto = new Date(row.durationBrutto)
+              const durationPause = new Date(row.durationPause)
 
-          return (
-          <tbody>
-            <tr>
-              <td>{startTime.format('DD.MM.  hh:mm')}</td>
-              <td>{endTime.format('DD.MM. hh:mm')}</td>
-              <td>{this.getNumber(durationBrutto.getHours() - 1) + ':' + this.getNumber(durationBrutto.getMinutes()) + state.dev + this.getNumber(durationBrutto.getSeconds()) + state.dev}</td>
-              <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + state.dev + this.getNumber(durationPause.getSeconds()) + state.dev}</td>
-            </tr>
-          </tbody>
-          )
-          })}
-        </table>
-        <div className="monthly">
-          <div className="monthly brutto">{'Monthly working time (b): ' + this.getNumber(monthlyBrutto.getHours() - 1) + ':' + this.getNumber(monthlyBrutto.getMinutes()) + state.dev + this.getNumber(monthlyBrutto.getSeconds()) + state.dev}</div>
-          <div className="monthly netto">{'Monthly working time (n): ' + this.getNumber(monthlyNetto.getHours() - 1) + ':' + this.getNumber(monthlyNetto.getMinutes()) + state.dev + this.getNumber(monthlyNetto.getSeconds()) + state.dev}</div>
-          <div className="monthly money">{'Monthly earnings: ' + monthlyMoney}</div>
-        </div>
+            return (
+            <tbody>
+              <tr>
+                <td>{startTime.format('DD.MM.  hh:mm')}</td>
+                <td>{endTime.format('DD.MM. hh:mm')}</td>
+                <td>{this.getNumber(durationBrutto.getHours() - 1) + ':' + this.getNumber(durationBrutto.getMinutes()) + state.dev + this.getNumber(durationBrutto.getSeconds()) + state.dev}</td>
+                <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + state.dev + this.getNumber(durationPause.getSeconds()) + state.dev}</td>
+              </tr>
+            </tbody>
+            )
+            })}
+          </table>
+
+          <div className="monthly">
+            <div className="monthly brutto">{'Monthly working time (b): ' + this.getNumber(monthlyBrutto.getHours() - 1) + ':' + this.getNumber(monthlyBrutto.getMinutes()) + state.dev + this.getNumber(monthlyBrutto.getSeconds()) + state.dev}</div>
+            <div className="monthly netto">{'Monthly working time (n): ' + this.getNumber(monthlyNetto.getHours() - 1) + ':' + this.getNumber(monthlyNetto.getMinutes()) + state.dev + this.getNumber(monthlyNetto.getSeconds()) + state.dev}</div>
+            <div className="monthly money">{'Monthly earnings: ' + (Math.round(monthlyMoney*10)/10) + ' €'}</div>
+          </div>
+
+
       <style jsx>{`
         .popup {
           position: fixed;
