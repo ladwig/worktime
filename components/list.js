@@ -44,7 +44,7 @@ class List extends Component {
           events,
           name: month,
           earnings: events.map(event => event.dailyEarnings).reduce((a, b) => a + b, 0),
-          monthlyNetto: events.map(event => event.durationNetto).reduce((a, b) => a + b, 0)
+          monthlyNetto: new Date(events.map(event => event.durationNetto).reduce((a, b) => a + b, 0))
         }
       }
 
@@ -63,7 +63,7 @@ class List extends Component {
                   <h3>Earnings</h3>
                 </div>
                 <div className="headings info">
-                  <h2>{monthlyNetto}</h2>
+                  <h2>{this.getNumber(monthlyNetto.getHours() - 1) + ':' + this.getNumber(monthlyNetto.getMinutes()) + state.dev + this.getNumber(monthlyNetto.getSeconds())}</h2>
                   <h3>Worktime</h3>
                 </div>
               </div>
