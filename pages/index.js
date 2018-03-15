@@ -76,7 +76,7 @@ class Index extends Component {
   }
 
   //Get the 0 in front of single numbers (0-9)
-  getNumber = deg => {
+  getZero = deg => {
     return ('0' + deg).slice(-2)
   }
 
@@ -151,9 +151,9 @@ class Index extends Component {
 
     //the consts for the shown timer & some others
     const time = new Date(this.state.timePassed)
-    const seconds = this.getNumber(time.getSeconds())
-    const hours = this.getNumber(time.getHours() - 1)
-    const minutes = this.getNumber(time.getMinutes())
+    const seconds = this.getZero(time.getSeconds())
+    const hours = this.getZero(time.getHours() - 1)
+    const minutes = this.getZero(time.getMinutes())
 
    return (
 

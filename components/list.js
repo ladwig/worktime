@@ -9,7 +9,7 @@ class List extends Component {
   }
 
   //Get the 0 in front of single numbers (0-9)
-  getNumber = deg => {
+  getZero = deg => {
     return ('0' + deg).slice(-2)
   }
 
@@ -34,11 +34,13 @@ class List extends Component {
       'Dezember'
     ]
 
+    //Maps trough the months to get the right one
     const list = months.map(month => {
       const events = state.list.filter(event => {
         return event.monthId === month
       })
 
+      //Import the objects from the "counter list" in the new array
       if (events.length > 0) {
         return {
           events,
@@ -63,7 +65,7 @@ class List extends Component {
                   <h3>Earnings</h3>
                 </div>
                 <div className="headings info">
-                  <h2>{this.getNumber(monthlyNetto.getHours() - 1) + ':' + this.getNumber(monthlyNetto.getMinutes()) + state.dev + this.getNumber(monthlyNetto.getSeconds())}</h2>
+                  <h2>{this.getZero(monthlyNetto.getHours() - 1) + ':' + this.getZero(monthlyNetto.getMinutes()) + state.dev + this.getZero(monthlyNetto.getSeconds())}</h2>
                   <h3>Worktime</h3>
                 </div>
               </div>
@@ -89,8 +91,8 @@ class List extends Component {
                     <tr>
                       <td>{startTime.format('DD.MM.  hh:mm')}</td>
                       <td>{endTime.format('DD.MM. hh:mm')}</td>
-                      <td>{this.getNumber(durationBrutto.getHours() - 1) + ':' + this.getNumber(durationBrutto.getMinutes()) + state.dev + this.getNumber(durationBrutto.getSeconds()) + state.dev}</td>
-                      <td>{this.getNumber(durationPause.getHours() - 1) + ':' + this.getNumber(durationPause.getMinutes()) + state.dev + this.getNumber(durationPause.getSeconds()) + state.dev}</td>
+                      <td>{this.getZero(durationBrutto.getHours() - 1) + ':' + this.getZero(durationBrutto.getMinutes()) + state.dev + this.getZero(durationBrutto.getSeconds()) + state.dev}</td>
+                      <td>{this.getZero(durationPause.getHours() - 1) + ':' + this.getZero(durationPause.getMinutes()) + state.dev + this.getZero(durationPause.getSeconds()) + state.dev}</td>
                     </tr>
                   </tbody>
                 )
