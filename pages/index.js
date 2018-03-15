@@ -168,10 +168,9 @@ class Index extends Component {
           <div className="continue" onClick={this.continueTimer}>Continue</div>
           <div className="stop" onClick={this.clearTimer}>Stop</div>
         </div>
-        <div className="row second">
-          <div className="show-popup" onClick={ x => {this.setState({ popup: 'block'})}}>Show List</div>
-        </div>
       </main>
+
+        <div className="show-popup" onClick={ x => {this.setState({ popup: 'block'})}}>Show monthly worktime...</div>
 
       <List mainState={this.state} setState={this.setState.bind(this)}/>
 
@@ -194,14 +193,14 @@ class Index extends Component {
           }
 
           .counter.wrapper {
-            height: 180px;
+            height: 220px;
           }
 
           .counter.time {
             font-size: 55px;
             color: #C8C8C8;
             text-align: center;
-            padding-top: 20%;
+            padding-top: 30%;
           }
 
           .row.first {
@@ -210,51 +209,50 @@ class Index extends Component {
 
           .start {
             color: #fff;
-            height: 60px;
+            height: 70px;
             width: 100%;
             background: green;
-            line-height: 60px;
+            line-height: 70px;
             text-align: center;
             display: ${this.state.buttonStart};
           }
 
           .pause {
             color: #fff;
-            height: 60px;
+            height: 70px;
             width: 50%;
             background: orange;
-            line-height: 60px;
+            line-height: 70px;
             text-align: center;
             display: ${this.state.buttonPause};
           }
 
           .continue {
             color: #fff;
-            height: 60px;
+            height: 70px;
             width: 50%;
             background: lightgreen;
-            line-height: 60px;
+            line-height: 70px;
             text-align: center;
             display: ${this.state.buttonCon};
           }
 
           .stop {
             color: #fff;
-            height: 60px;
+            height: 70px;
             width: 50%;
             background: red;
-            line-height: 60px;
+            line-height: 70px;
             text-align: center;
             display: ${this.state.buttonStop};
           }
 
           .show-popup {
-            color: #fff;
-            height: 60px;
+            color: gray;
+            height: 20px;
             width: 100%
-            background: lightgray;
             display: block;
-            line-height: 60px;
+            margin-top: 60px;
             text-align: center;
           }
 
