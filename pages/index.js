@@ -256,6 +256,11 @@ class Index extends Component {
             text-align: center;
           }
 
+          .show-popup:hover,
+          .show-popup:focus {
+            color: rgb(31, 31, 31)
+          }
+
           List {
             position: fixed;
             z-index: 1;
