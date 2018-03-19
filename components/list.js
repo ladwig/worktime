@@ -57,7 +57,7 @@ class List extends Component {
       <div className="popup">
         <span className="close" onClick={ x => {setState({ popup: 'none'})}}>&times;</span>
           {list.map(({ events, name, earnings, monthlyNetto }) => (
-            <div className="popup content">
+            <div key={events.toString()} className="popup content">
               <div className="headings">
                 <h1>{name}</h1>
                 <div className="headings info">
@@ -87,7 +87,7 @@ class List extends Component {
                 const durationPause = new Date(row.durationPause)
 
                 return (
-                  <tbody>
+                  <tbody key={startTime.toString()}>
                     <tr>
                       <td>{startTime.format('DD.MM.  hh:mm')}</td>
                       <td>{endTime.format('DD.MM. hh:mm')}</td>
